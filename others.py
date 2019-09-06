@@ -75,3 +75,6 @@ def detrend2d(Z):
     Z_f = Z - Z_p;
 
     return Z_f, Z_p
+
+def multiple(z, g)
+    return z, g
