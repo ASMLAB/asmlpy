@@ -99,3 +99,58 @@ def calmld(RC, T, S, drho=0.03):
 
     return -mld
 
+def computecurl(u, v, DXC, DYC, RAZ):
+    """
+    + object: Compute the curl 
+    + input
+      - u   : x-component of a flow or wind vector, 2D
+              defined at U point
+      - v   : v-component of a flow or wind vector, 2D
+              defined at V point
+      - DXC : distance in x direction between two grid centers, 2D, [m]
+      - DYC : distance in y direction between two grid centers, 2D, [m]
+      - RAZ : An area connecting 4 center points ("t" in the figure), 
+              2D, [m2]
+    + output
+      - vcurl  : curl on the corner points at "p" in the figure
+      - vcurlc : curl on the center points at "t" in the figure
+      
+    [ C-grid structure ]
+     |       |-----------v-----------|-----------v----------|-
+     |       |                       |                      |
+     |       |                       |                      |
+     |       |                       |                      |
+     |       |                       |                      |
+     |       u           t-----------u-----------t          |
+     |       |          /|\          |           |          |
+     |       |           |           |           |          |
+     |       |           |           |           |          |
+     |       |          dyC(i=1,     |           |          |
+     | ---  -------------|--j=2,-----p-----------v----------|-
+     | /|\   |           |  k=1)     |           |          |
+     |  |    |           |           |           |          |
+     |  |    |           |           |           |          |
+     |dyG(   |          \|/          |           |          |
+     |   i=1,u           t<---dxC(i=2,j=1,k=1)-->t          |
+     |   j=1,|                       |                      |
+     |   k=1)|                       |                      |
+     |  |    |                       |                      |
+     | \|/   |                       |                      |
+     |"SB"++>|___________v___________|___________v__________|_
+     |       <--dxG(i=1,j=1,k=1)----->
+    """
+    vcurl = np.zeros(grd.DXC.shape)
+    vcurlc = np.zeros(grd.DXC.shape)
+
+    vv1 = DXC * u
+    vv2 = DYC * v
+    vcurl[:, 1:] = vv2[:, 1:] - vv2[:, :-1]
+    vcurl[1:, :] = vcurl[1:, :] - (vv1[1:, :] - vv1[:-1, :])
+    vcurl = vcurl/RAZ
+
+    vcurlc[1:-1, 1:-1] = 0.25 * (vcurl[1:-1, 1:-1] + vcurl[2:, 1:-1]\
+                         + vcurl[1:-1, 2:] + vcurl[2:, 2:])
+
+    return vcurl, vcurlc
+
+
