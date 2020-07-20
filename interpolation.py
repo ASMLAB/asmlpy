@@ -368,10 +368,11 @@ def interp_bdry (source_h, source_z, source_data, source_hfac, target_h, target_
 # grid can either be a Grid object, or an array of depth values
 def interp_to_depth (data, z0, grid, time_dependent=False, gtype='t'):
 
-    if isinstance(grid, Grid):
-        z = grid.z
-    else:
-        z = grid
+    #if isinstance(grid, Grid):
+    #    z = grid.z
+    #else:
+    #    z = grid
+    z = grid
         
     if gtype == 'w':
         print('Error (interp_to_depth): w-grids not supported yet')

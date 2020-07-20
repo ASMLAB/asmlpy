@@ -17,7 +17,7 @@ def loadgrid(dirGrid, region=None, varname=None, flag=1):
     + output
       - grd     : class variable that contains "varname"
     """
-    tmp = rdmds(dirGrid + "XC")
+    tmp = rdmds(dirGrid + "/XC")
     [Ly, Lx] = tmp.shape
     if varname is None:
         varname = ['XC','YC','RAC','DXC','DYC','hFacC','hFacW','hFacS','Depth',\
@@ -28,14 +28,14 @@ def loadgrid(dirGrid, region=None, varname=None, flag=1):
     class grd(object):
         for iv, vname in enumerate(varname):
             if region is None:
-                exec('tmpvar=rdmds("'+dirGrid+varname[iv]+'")');
+                exec('tmpvar=rdmds("'+dirGrid+'/'+varname[iv]+'")');
                 tmpvar = tmpvar.squeeze();
                 exec(varname[iv]+'=tmpvar')
             else:
                 if vname is 'RC' or vname is 'RF' or vname is 'DRC' or vname is 'DRF':
-                    exec('tmpvar=rdmds("'+dirGrid+varname[iv]+'")');
+                    exec('tmpvar=rdmds("'+dirGrid+'/'+varname[iv]+'")');
                 else:
-                    exec('tmpvar=rdmds("'+dirGrid+varname[iv]+'",region='+str(region)+')');
+                    exec('tmpvar=rdmds("'+dirGrid+'/'+varname[iv]+'",region='+str(region)+')');
                 tmpvar = tmpvar.squeeze();
                 exec(varname[iv]+'=tmpvar')
             if vname=='hFacC':
