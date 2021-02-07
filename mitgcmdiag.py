@@ -139,8 +139,8 @@ def computecurl(u, v, DXC, DYC, RAZ):
      |"SB"++>|___________v___________|___________v__________|_
      |       <--dxG(i=1,j=1,k=1)----->
     """
-    vcurl = np.zeros(grd.DXC.shape)
-    vcurlc = np.zeros(grd.DXC.shape)
+    vcurl = np.zeros(DXC.shape)
+    vcurlc = np.zeros(DXC.shape)
 
     vv1 = DXC * u
     vv2 = DYC * v
