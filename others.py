@@ -1,6 +1,19 @@
 import numpy as np
 import scipy.signal
 
+def inpaint_nans_1d(im):
+    ipn_kernel = np.array([1,0,1]) # kernel for inpaint_nans
+    nans = np.isnan(im)
+    while np.sum(nans)>0:
+        im[nans] = 0
+        vNeighbors = scipy.signal.convolve((nans==False),ipn_kernel,mode='same')
+        im2 = scipy.signal.convolve(im,ipn_kernel,mode='same')
+        im2[vNeighbors>0] = im2[vNeighbors>0]/vNeighbors[vNeighbors>0]
+        im2[vNeighbors==0] = np.nan
+        im2[(nans==False)] = im[(nans==False)]
+        im = im2
+        nans = np.isnan(im)
+
 def inpaint_nans(im):
     """
     + object : fill finite numbers in NaN

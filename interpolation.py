@@ -428,7 +428,7 @@ def interp_nonreg_xyz (source_lon, source_lat, source_z, source_data, target_lon
     # Interpolate each depth individually
     data_interp = np.ma.empty([nz, ny, nx])
     for k in range(nz):
-        print('...depth ' + str(k+1) + ' of ' + str(nz))
+        #print('...depth ' + str(k+1) + ' of ' + str(nz))
         if k==0 and target_z[k] > source_z[0]:
             # Target grid's surface layer is too shallow - extrapolate
             source_data_2d = source_data[0,:]
