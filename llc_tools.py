@@ -125,8 +125,8 @@ def readllc270(var):
             v2 = var[k,810:1620,:]
             v4 = var[k,1890:2700,:]
             v5 = var[k,2700:3510,:]
-            v4 = np.flipud(np.reshape(v4.flatten(), [270,1080]).T)
-            v5 = np.flipud(np.reshape(v5.flatten(), [270,1080]).T)
+            v4 = np.flipud(np.reshape(v4.flatten(), [270,810]).T)
+            v5 = np.flipud(np.reshape(v5.flatten(), [270,810]).T)
             llvar[k,:,:] = np.concatenate((v1,v2,v4,v5), axis=1)
         llcap = var[:,1620:1890,:]
 
