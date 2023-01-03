@@ -4,7 +4,7 @@ from .llc_tools import readllc90, readllc90_vector, readllc270
 from .dicdiagtool import advection,hadvection,vadvection
 from .interpolation import interp_nonreg_xy, interp_nonreg_xyz
 from .fft_related import rotaryspectra
-from .layertools import invert_map
+from .layertools import invert_map, psires_layers
 
 __all__ = ['calmld', 'loadgrid', 'computecurl', 
            'inpaint_nans_local', 'inpaint_nans', 'detrend2d']

@@ -95,3 +95,49 @@ def invert_map(fldZ, zC, zF, fldVec):
         k0Fld[j,:]=kk;
 
     return kFld, zFld, k0Fld
+
+
+def psires_layers(VH, DXG, orient='top'):
+    """
+    Psi = psires_layers(VH, orient):
+
+    [description]
+    Compute the residual overturning circulation using the LAYERS package.
+
+    [inputs]
+    VH     : 2D or 3D array with layer integrated merid. transport [m^2/s]
+    DXG    : 1D or 2D array with the grid spacing in x-direction
+    orient : The orientation of integration. Choose either "top" or "bottom"
+
+    [output]
+    Psi    : 2D array of residual overturning circulation. [m^3/s]
+             If VH is the 3D array, the output is zonally integrated.
+    """
+    #
+    #  Considering the grid space
+    #
+    ndim = len(VH.shape)
+    if ndim == 2:
+        [nl, ny] = VH.shape
+        VH = VH * np.tile(DXG, [nl, 1])
+    elif ndim == 3:
+        [nl, ny, nx] = VH.shape
+        VH = VH * np.tile(DXG, [nl, 1, 1])
+        VH = np.sum(VH, axis=2)
+    else:
+        sys.exit("Error: VH is neither 2D nor 3D array.")
+    #
+    #  If integrating from the bottom, the sign has to be changed.
+    #
+    if orient == 'bottom':
+        print('Integrating VH from the bottom')
+        VH = -np.flipud(VH)
+
+    Psi = VH.cumsum(axis = 0)
+    #
+    #  If integrating from the bottom, bring the array back to the normal order
+    #
+    if orient == 'bottom':
+        Psi = np.flipud(Psi)
+
+    return Psi
