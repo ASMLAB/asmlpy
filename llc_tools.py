@@ -1,5 +1,40 @@
 import numpy as np
 
+def readllc(var):
+    """
+    Reading data in LLC90 grid
+    NEED TO GENERALIZE THE CODE!!
+    """
+    dim = len(np.shape(var))
+    if dim == 2:
+        [ny, nx] = var.shape
+        N = nx*3
+        v1 = var[:N,:]
+        v2 = var[N:N*2,:]
+        v3 = var[N*2:(N*2+nx),:]
+        v4 = var[(N*2+nx):(N*3+nx),:]
+        v5 = var[(N*3+nx):(N*4+nx),:]
+        v4 = np.flipud(np.reshape(v4.flatten(), [nx,N]).T)
+        v5 = np.flipud(np.reshape(v5.flatten(), [nx,N]).T)
+        llvar = np.concatenate((v1,v2,v4,v5), axis=1)
+        llcap = v3.copy()
+    if dim == 3:
+        [nz, ny, nx] = var.shape
+        N = nx*3
+        llvar = np.zeros([nz, N, nx*4])
+        for k in range(nz):
+            v1 = var[k,:N,:]
+            v2 = var[k,N:N*2,:]
+            v3 = var[k,N*2:(N*2+nx),:]
+            v4 = var[k,(N*2+nx):(N*3+nx),:]
+            v5 = var[k,(N*3+nx):(N*4+nx),:]
+            v4 = np.flipud(np.reshape(v4.flatten(), [nx,N]).T)
+            v5 = np.flipud(np.reshape(v5.flatten(), [nx,N]).T)
+            llvar[k,:,:] = np.concatenate((v1,v2,v4,v5), axis=1)
+        llcap = var[:,(N*2+nx):(N*3+nx),:]
+
+    return llvar, llcap
+
 def readllc90(var):
     """
     Reading data in LLC90 grid
